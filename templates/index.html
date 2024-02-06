@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Recommender System</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<style>
+    body {
+        background-color: #ecf0f1;
+    }
+
+    .text-white {
+        color: white;
+    }
+
+    .navbar {
+        box-shadow: 0px 1px 8px 1px rgb(251, 248, 248);
+        border-bottom: 2px solid white;
+        position: sticky !important;
+        z-index: 10 !important;
+        width: 100% !important;
+        top: 0;
+    }
+  
+
+    .card {
+        transition: transform 0.2s;
+        margin-bottom: 20px;
+        height: 400px; /* Set a fixed height for the cards */
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card-img-top {
+        height: 200px; /* Set a fixed height for the card image */
+        object-fit: cover;
+    }
+</style>
+<body>
+
+    <nav class="navbar text-white" style="background-color: #181818;">
+        <a class="navbar-brand text-white">My Book Recommender </a>
+        <ul class="nav navbar-nav">
+            <li><a href="/" class="text-white">Home</a></li>
+            <li><a href="/collaborativerecommend" class="text-white">Recommend</a></li>
+
+        </ul>
+    </nav>
+    <h1 class="container p-4 text-center font-weight-bold " style="margin-bottom: 30px;font-weight: bold;text-decoration: underline;">TOP 50 BOOKS</h1>
+
+    <div class="container mt-5">
+        <div class="row">
+            {% for i in range(book_name|length) %}
+            <div class="col-md-3 mt-4 col-sm-4 ">
+                <div class="card text-center "style="border: 1px solid #ccc;padding: 25px;border-radius:8px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    {% if book_name[i] == "The Hitchhiker's Guide to the Galaxy" %}
+                        {% set book_image = 'https://images-na.ssl-images-amazon.com/images/W/MEDIAX_792452-T2/images/I/81wixAH4-cL._AC_UL600_SR600,600_.jpg' %}
+                    {% elif book_name[i] == "Outlander" %}
+                        {% set book_image = 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1659086907i/10964.jpg' %}
+                    {% elif book_name[i] == "The Color Purple" %}
+                        {% set book_image = 'https://upload.wikimedia.org/wikipedia/en/thumb/6/60/ColorPurple.jpg/220px-ColorPurple.jpg' %}
+                        
+                        {% else %}
+                        {% set book_image = image[i] | default('https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8N3x8fGVufDB8fHx8fA%3D%3D') %}
+                    {% endif %}
+                    <img class="card-img-top" src="{{ book_image }}" alt="{{ book_name[i] }}" width="150px" style="object-fit: contain;" height="250px">
+                    <div class="card-body" style="margin-top: 20px;">
+                        <h5 class="card-title">{{ book_name[i] }}</h5>
+                        <p class="card-text">{{ author[i] }}</p>
+                        <p class="card-text">Votes: {{ votes[i] }}</p>
+                        <p class="card-text">Rating: {{ rating[i] }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        
+        </div>
+    </div>
+
+</body>
+</html>

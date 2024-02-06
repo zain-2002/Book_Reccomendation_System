@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>Book Recommender System</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- Include SweetAlert script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+ 
+    
+    {% if error_message is defined and error_message %}
+        <script>
+            // Display SweetAlert
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Enter Valid Book Name',
+                    text: '{{ error_message }}',
+                });
+            });
+        </script>
+    {% endif %}
+</head>
+<style>
+    body {
+        background-color: #ecf0f1;
+    }
+
+    .text-white {
+        color: white;
+    }
+
+    .navbar {
+        box-shadow: 0px 1px 8px 1px rgb(251, 248, 248);
+        border-bottom: 2px solid white;
+        position: sticky !important;
+        z-index: 10 !important;
+        width: 100% !important;
+        top: 0;
+        display: flex;
+        justify-content: left;
+     gap: 10px;
+     padding-left: 15px;
+    }
+    .itm1:hover{
+        background-color: white !important;
+        color: black !important;
+        padding: 8px;
+        border-radius: 6px;
+    }
+    .itm2:hover{
+        background-color: white !important;
+        color: #181818 !important;
+        padding: 8px;
+        border-radius: 6px;
+
+    }
+    .card {
+        transition: transform 0.2s;
+        margin-bottom: 20px;
+        height: 400px; /* Set a fixed height for the cards */
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card-img-top {
+        height: 200px; /* Set a fixed height for the card image */
+        object-fit: cover;
+    }
+    a{
+        text-decoration: none;
+    }
+</style>
+<body>
+
+    <nav class="navbar text-white" style="background-color: #181818;">
+        <a class="navbar-brand text-white">My Book Recommender </a>
+        <ul class="nav navbar-nav " style="display: flex;flex-direction: row;gap: 10px;">
+            <li><a href="/" class="text-white itm1">Home</a></li>
+            <li><a href="/collaborativerecommend" class="text-white itm2">Recommend</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 flex">
+                <h1  style="font-size:50px">Recommend Books</h1>
+                <form action="/recommend_books" method="post" class="SearchForm" >
+                    <input name="user_input" type="text" class="form-control"><br>
+                    <input type="submit" class="btn btn-lg btn-warning">
+                </form>
+            </div>
+</div>
+
+<div class="row" style="row-gap: 140px;">
+
+
+            {% if data %}
+            <h1 class="txt" style="font-size:50px;margin-top: 40px;margin-bottom: -160px;">Collaborative Recommendation:</h1>
+
+             {% for i in data[0] %}
+                <div class="col-6 col-md-3 col-sm-4 " style="margin-top: 50px;height:250px;width:300px" >
+                    <div class="card text-center"style="border: 1px solid #ccc;padding: 25px;border-radius:8px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                        <img class="card-img-top" src="{{i[2]}}" style="object-fit: contain;" height="250px" width="150px">
+                        <div class="card-body " style="margin-top: 16px;">
+                            <p class="card-title " style="margin-top: 15px;">{{i[0]}}</p>
+                            <h4 class="card-text">{{i[1]}}</h4>
+                        </div>
+                    </div>
+                </div>
+             {% endfor %}
+             <h1 class="txt" style="font-size:50px;margin-top: 40px;margin-bottom: -140px;">Hybird Recommendation:</h1>
+             {% for i in data[1][:8] %}
+             <div class="col-6 col-md-3 col-sm-4 " style="margin-top: 50px;height:250px;width:300px" >
+                 <div class="card text-center"style="border: 1px solid #ccc;padding: 25px;border-radius:8px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                     <img class="card-img-top" src="{{i[2]}}" style="object-fit: contain;" height="250px" width="150px">
+                     <div class="card-body " style="margin-top: 16px;">
+                         <p class="card-title " style="margin-top: 15px;">{{i[0]}}</p>
+                         <h4 class="card-text">{{i[1]}}</h4>
+                     </div>
+                 </div>
+             </div>
+             {% endfor %}
+            {% endif %}
+
+
+
+
+        </div>
+    </div>
+  
+</body>
+</html>
